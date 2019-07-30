@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+<Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+        <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+    </Console>
+    <File name="MyFile" fileName="all.log" immediateFlush="false" append="false">
+        <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </File>
+    <Cassandra name="Cassandra" clusterName="Test Cluster" keyspace="tw" table="gii_event_log" bufferSize="10" batched="true">
+        <SocketAddress host="192.168.1.20" port="9042"/>
+        <ColumnMapping name="id" pattern="%uuid{TIME}" type="java.util.UUID"/>
+        <ColumnMapping name="identifier" pattern="%marker"/>
+        <ColumnMapping name="message" pattern="%message"/>
+        <ColumnMapping name="priority" pattern="%level"/>
+        <ColumnMapping name="scope" pattern="%level"/>
+        <ColumnMapping name="time_stamp" literal="now()"/>
+        <ColumnMapping name="type" pattern="%level"/>
+    </Cassandra>
+</Appenders>
+<Loggers>
+    <Root level="debug">
+        <AppenderRef ref="Console"/>
+        <AppenderRef ref="MyFile"/>
+        <AppenderRef ref="Cassandra"/>
+    </Root>
+</Loggers>
+</Configuration>
